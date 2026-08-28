@@ -28,8 +28,7 @@ For every target book product, the scraper extracts:
 - **Price**: Currency-formatted price (e.g. `£51.77`).
 - **Availability**: Stock availability status (e.g. `In stock`).
 - **Product URL**: Fully resolved absolute URL (e.g. `https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html`).
-- **Rating**: Extracted word rating (e.g. `Three`, `Five`, or `None` if missing).
-- **Category**: Breadcrumb category if available.
+- **Rating**: Numeric star rating from 1 to 5 if available (e.g. `3`, `5`, or `None` if missing).
 
 ---
 
@@ -141,11 +140,11 @@ options:
 ### Terminal Table Output
 
 ```text
-# | Title                               | Price  | Availability | Rating | URL
---+-------------------------------------+--------+--------------+--------+-------------------------------------------------------------------------
-1 | A Light in the Attic                | £51.77 | In stock     | Three  | https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html
-2 | Tipping the Velvet                  | £53.74 | In stock     | One    | https://books.toscrape.com/catalogue/tipping-the-velvet_999/index.html
-3 | Soumission                          | £50.10 | In stock     | One    | https://books.toscrape.com/catalogue/soumission_998/index.html
+#  | Title                                    | Price  | Availability | Rating | URL
+---+------------------------------------------+--------+--------------+--------+-----------------------------------------
+1  | A Light in the Attic                     | £51.77 | In stock     | 3/5    | https://books.toscrape.com/catalogue/...
+2  | Tipping the Velvet                       | £53.74 | In stock     | 1/5    | https://books.toscrape.com/catalogue/...
+3  | Soumission                               | £50.10 | In stock     | 1/5    | https://books.toscrape.com/catalogue/...
 ```
 
 ### JSON Output
@@ -157,8 +156,7 @@ options:
     "price": "£51.77",
     "availability": "In stock",
     "url": "https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html",
-    "rating": "Three",
-    "category": null
+    "rating": 3
   }
 ]
 ```

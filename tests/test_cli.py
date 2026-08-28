@@ -27,16 +27,14 @@ class TestCLI(unittest.TestCase):
                 price="£10.00",
                 availability="In stock",
                 url="https://example.com/b1",
-                rating="Five",
-                category="Fiction",
+                rating=5,
             ),
             Book(
                 title="Book Two",
                 price="£20.00",
                 availability="In stock",
                 url="https://example.com/b2",
-                rating="Three",
-                category="Non-Fiction",
+                rating=3,
             ),
         ]
 
@@ -75,22 +73,36 @@ class TestCLI(unittest.TestCase):
         data = json.loads(json_str)
         self.assertEqual(len(data), 2)
         self.assertEqual(data[0]["title"], "Book One")
+        self.assertEqual(data[0]["rating"], 5)
         self.assertEqual(data[1]["price"], "£20.00")
+        self.assertNotIn("category", data[0])
 
     def test_format_csv(self) -> None:
         """Verify CSV output header and rows."""
         csv_str = format_csv(self.sample_books)
         lines = csv_str.strip().splitlines()
-        self.assertEqual(lines[0], "title,price,availability,rating,category,url")
-        self.assertIn("Book One", lines[1])
-        self.assertIn("Book Two", lines[2])
+        self.assertEqual(lines[0], "title,price,availability,rating,url")
+        self.assertIn("Book One,£10.00,In stock,5,https://example.com/b1", lines[1])
+        self.assertIn("Book Two,£20.00,In stock,3,https://example.com/b2", lines[2])
 
     def test_format_table(self) -> None:
-        """Verify table output includes headers and formatted rows."""
+        """Verify table output includes headers, numeric ratings, and URL truncation."""
         table_str = format_table(self.sample_books)
         self.assertIn("Title", table_str)
-        self.assertIn("Book One", table_str)
-        self.assertIn("Book Two", table_str)
+        self.assertIn("Rating", table_str)
+        self.assertIn("5/5", table_str)
+        self.assertIn("3/5", table_str)
+        self.assertIn("https://example.com/b1", table_str)
+
+        long_book = Book(
+            title="Long Book Title",
+            price="£15.00",
+            availability="In stock",
+            url="https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html",
+            rating=4,
+        )
+        long_table_str = format_table([long_book])
+        self.assertIn("https://books.toscrape.com/catalogue/...", long_table_str)
 
     @patch("web_scraper.cli.WebScraper")
     def test_main_stdout_execution(self, mock_scraper_cls: MagicMock) -> None:

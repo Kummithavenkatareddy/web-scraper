@@ -13,16 +13,14 @@ class Book:
         price: The displayed price string (e.g. '£51.77').
         availability: Stock status (e.g. 'In stock').
         url: Absolute URL to the product detail page.
-        rating: Word rating if available (e.g. 'Three', 'Five', or None).
-        category: Catalog category if available (or None).
+        rating: Integer star rating from 1 to 5 if available (or None).
     """
 
     title: str
     price: str
     availability: str
     url: str
-    rating: str | None = None
-    category: str | None = None
+    rating: int | None = None
 
     def to_dict(self) -> dict[str, Any]:
         """Convert model instance into a standard dictionary.

@@ -144,7 +144,7 @@ Brittle, deeply nested selectors (such as `body > div:nth-child(2) > div > div >
 - **Stock Availability**: `.availability`
   - Strips inner icon HTML and normalizes whitespace into clean strings (e.g. `In stock`).
 - **Star Rating**: `.star-rating`
-  - Extracts rating level from secondary class names (e.g. `star-rating Three` -> `Three`).
+  - Maps rating level from CSS class names to numeric integers (e.g. `star-rating Three` -> `3`).
 - **Next Page Anchor**: `ul.pager li.next a[href]`
   - Resolves next page URL for pagination crawling.
 

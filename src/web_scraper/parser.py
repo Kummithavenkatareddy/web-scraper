@@ -5,11 +5,25 @@ from bs4 import BeautifulSoup
 from web_scraper.models import Book
 
 
+RATING_MAP = {
+    "One": 1,
+    "1": 1,
+    "Two": 2,
+    "2": 2,
+    "Three": 3,
+    "3": 3,
+    "Four": 4,
+    "4": 4,
+    "Five": 5,
+    "5": 5,
+}
+
+
 def parse_books(html: str, base_url: str) -> list[Book]:
     """Parse HTML text and extract structured Book entities.
 
     Args:
-        html: Raw HTML content of a book catalog or category page.
+        html: Raw HTML content of a book catalog page.
         base_url: Base URL used to resolve relative product URLs into absolute URLs.
 
     Returns:
@@ -21,10 +35,6 @@ def parse_books(html: str, base_url: str) -> list[Book]:
     soup = BeautifulSoup(html, "html.parser")
     book_pods = soup.select("article.product_pod")
     books: list[Book] = []
-
-    # Optional category extraction from breadcrumb if present
-    breadcrumb_elem = soup.select_one("ul.breadcrumb li:nth-child(3) a")
-    category_name = breadcrumb_elem.get_text(strip=True) if breadcrumb_elem else None
 
     for pod in book_pods:
         # Extract title and product URL from h3 > a
@@ -44,14 +54,14 @@ def parse_books(html: str, base_url: str) -> list[Book]:
         availability_elem = pod.select_one(".availability")
         availability = " ".join(availability_elem.get_text().split()) if availability_elem else "Unknown"
 
-        # Extract star rating from class attribute (e.g. 'star-rating Three')
-        rating: str | None = None
+        # Extract numeric star rating from class attribute (e.g. 'star-rating Three' -> 3)
+        rating: int | None = None
         rating_elem = pod.select_one(".star-rating")
         if rating_elem and rating_elem.has_attr("class"):
             classes = rating_elem["class"]
             rating_classes = [c for c in classes if c != "star-rating"]
             if rating_classes:
-                rating = rating_classes[0]
+                rating = RATING_MAP.get(rating_classes[0], None)
 
         book = Book(
             title=title,
@@ -59,7 +69,6 @@ def parse_books(html: str, base_url: str) -> list[Book]:
             availability=availability,
             url=product_url,
             rating=rating,
-            category=category_name,
         )
         books.append(book)
 

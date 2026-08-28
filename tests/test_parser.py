@@ -29,15 +29,17 @@ class TestParser(unittest.TestCase):
         """Verify detailed attributes of extracted Book objects."""
         books = parse_books(self.fixture_html, BASE_URL)
         book1 = books[0]
+        book2 = books[1]
 
         self.assertEqual(book1.title, "A Light in the Attic")
         self.assertEqual(book1.price, "£51.77")
         self.assertEqual(book1.availability, "In stock")
-        self.assertEqual(book1.rating, "Three")
+        self.assertEqual(book1.rating, 3)
         self.assertEqual(
             book1.url,
             "https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html",
         )
+        self.assertEqual(book2.rating, 1)
 
     def test_missing_rating(self) -> None:
         """Verify that a book missing star rating class defaults rating to None."""
@@ -53,10 +55,12 @@ class TestParser(unittest.TestCase):
         self.assertEqual(book3.availability, "In stock")
 
     def test_relative_url_conversion(self) -> None:
-        """Verify relative URLs are converted to absolute URLs via urljoin."""
+        """Verify relative URLs are converted to raw absolute URLs without markdown markup."""
         books = parse_books(self.fixture_html, BASE_URL)
         for book in books:
             self.assertTrue(book.url.startswith("https://books.toscrape.com/"))
+            self.assertNotIn("[", book.url)
+            self.assertNotIn("]", book.url)
 
     def test_empty_html(self) -> None:
         """Verify passing empty or whitespace HTML returns an empty list."""

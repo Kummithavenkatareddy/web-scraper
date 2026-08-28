@@ -15,11 +15,11 @@ python -m web_scraper https://books.toscrape.com/ --max-pages 1
 ### Sample Terminal Output
 
 ```text
-# | Title                               | Price  | Availability | Rating | URL
---+-------------------------------------+--------+--------------+--------+-------------------------------------------------------------------------
-1 | A Light in the Attic                | £51.77 | In stock     | Three  | https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html
-2 | Tipping the Velvet                  | £53.74 | In stock     | One    | https://books.toscrape.com/catalogue/tipping-the-velvet_999/index.html
-3 | Soumission                          | £50.10 | In stock     | One    | https://books.toscrape.com/catalogue/soumission_998/index.html
+#  | Title                                    | Price  | Availability | Rating | URL
+---+------------------------------------------+--------+--------------+--------+-----------------------------------------
+1  | A Light in the Attic                     | £51.77 | In stock     | 3/5    | https://books.toscrape.com/catalogue/...
+2  | Tipping the Velvet                       | £53.74 | In stock     | 1/5    | https://books.toscrape.com/catalogue/...
+3  | Soumission                               | £50.10 | In stock     | 1/5    | https://books.toscrape.com/catalogue/...
 ```
 
 ---
@@ -51,16 +51,14 @@ python -m web_scraper https://books.toscrape.com/ --format json --output scraped
     "price": "£51.77",
     "availability": "In stock",
     "url": "https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html",
-    "rating": "Three",
-    "category": null
+    "rating": 3
   },
   {
     "title": "Tipping the Velvet",
     "price": "£53.74",
     "availability": "In stock",
     "url": "https://books.toscrape.com/catalogue/tipping-the-velvet_999/index.html",
-    "rating": "One",
-    "category": null
+    "rating": 1
   }
 ]
 ```
@@ -78,7 +76,7 @@ python -m web_scraper https://books.toscrape.com/ --format csv --output scraped_
 ### Sample CSV Output
 
 ```csv
-title,price,availability,rating,category,url
-A Light in the Attic,£51.77,In stock,Three,,https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html
-Tipping the Velvet,£53.74,In stock,One,,https://books.toscrape.com/catalogue/tipping-the-velvet_999/index.html
+title,price,availability,rating,url
+A Light in the Attic,£51.77,In stock,3,https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html
+Tipping the Velvet,£53.74,In stock,1,https://books.toscrape.com/catalogue/tipping-the-velvet_999/index.html
 ```

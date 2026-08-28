@@ -40,14 +40,16 @@ def format_table(books: list[Book]) -> str:
     for idx, book in enumerate(books, start=1):
         # Truncate very long titles for neat terminal rendering
         title_disp = (book.title[:37] + "...") if len(book.title) > 40 else book.title
-        rating_disp = book.rating or "N/A"
+        rating_disp = f"{book.rating}/5" if book.rating is not None else "N/A"
+        # Truncate long URLs for neat terminal display while preserving raw URL in underlying data
+        url_disp = (book.url[:37] + "...") if len(book.url) > 40 else book.url
         rows.append([
             str(idx),
             title_disp,
             book.price,
             book.availability,
             rating_disp,
-            book.url,
+            url_disp,
         ])
 
     # Compute column widths
@@ -92,7 +94,7 @@ def format_csv(books: list[Book]) -> str:
         return ""
 
     output = io.StringIO()
-    fieldnames = ["title", "price", "availability", "rating", "category", "url"]
+    fieldnames = ["title", "price", "availability", "rating", "url"]
     writer = csv.DictWriter(output, fieldnames=fieldnames)
     writer.writeheader()
     for book in books:
